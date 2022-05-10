@@ -1,0 +1,4 @@
+include ':app'
+include ':AF_ModuleA'
+include ':AF_ModuleB'
+include ':AF_BaseBiz'
