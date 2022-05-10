@@ -1,4 +1,6 @@
 include ':app'
-include ':AF_ModuleA'
+include ':AF_ModuleC'
 include ':AF_ModuleB'
-include ':AF_BaseBiz'
+include ':AF_AppLikeLifeCycleManager'
+include ':AF_AppLikeCreate'
+include ':AF_AppLikeAnnotation'
