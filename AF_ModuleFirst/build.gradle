@@ -1,21 +1,22 @@
-apply plugin: 'com.android.application'
+plugins {
+    id 'com.android.library'
+}
 
 android {
     compileSdkVersion rootProject.ext.android.compileSdkVersion
     buildToolsVersion rootProject.ext.android.buildToolsVersion
 
+
     defaultConfig {
-        applicationId "com.afs.applikelifecycle"
         minSdkVersion rootProject.ext.android.minSdkVersion
         targetSdkVersion rootProject.ext.android.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
         javaCompileOptions {
             annotationProcessorOptions {
                 includeCompileClasspath true
             }
         }
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
     }
 
     buildTypes {
@@ -31,15 +32,10 @@ android {
 }
 
 dependencies {
+
     implementation 'androidx.appcompat:appcompat:1.3.0'
     implementation 'com.google.android.material:material:1.4.0'
-    //AppLike类的注解
     implementation project(path: ':AF_AppLikeAnnotation')
-    //AppLike类生命周期管理者
     implementation project(path: ':AF_AppLikeLifeCycleManager')
-    //AppLike类初始化
     implementation project(path: ':AF_AppLikeCreate')
-    implementation project(path: ':AF_ModuleFirst')
-    implementation project(path: ':AF_ModuleB')
-    implementation project(path: ':AF_ModuleC')
 }
