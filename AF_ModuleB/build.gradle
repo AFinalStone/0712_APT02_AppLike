@@ -10,7 +10,11 @@ android {
     defaultConfig {
         minSdkVersion rootProject.ext.android.minSdkVersion
         targetSdkVersion rootProject.ext.android.targetSdkVersion
-
+        javaCompileOptions {
+            annotationProcessorOptions {
+                includeCompileClasspath true
+            }
+        }
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
     }
@@ -33,4 +37,5 @@ dependencies {
     implementation 'com.google.android.material:material:1.4.0'
     implementation project(path: ':AF_AppLikeAnnotation')
     implementation project(path: ':AF_AppLikeLifeCycleManager')
+    implementation project(path: ':AF_AppLikeCreate')
 }

@@ -41,7 +41,7 @@ public class AppLikeProxyClassCreator {
 
         //设置import部分
         sb.append("import android.content.Context;\n");
-        sb.append("import com.hm.lifecycle.api.IAppLike;\n");
+        sb.append("import com.afs.applike.lifecycle.IAppLike;\n");
         sb.append("import ").append(mTypeElement.getQualifiedName()).append(";\n\n");
 
         sb.append("public class ").append(mProxyClassSimpleName)
@@ -66,8 +66,8 @@ public class AppLikeProxyClassCreator {
         sb.append("  }\n\n");
 
         //onTerminate方法
-        sb.append("  public void onTerminate() {\n");
-        sb.append("    mAppLike.onTerminate();\n");
+        sb.append("  public void onDestroy() {\n");
+        sb.append("    mAppLike.onDestroy();\n");
         sb.append("  }\n\n");
 
 

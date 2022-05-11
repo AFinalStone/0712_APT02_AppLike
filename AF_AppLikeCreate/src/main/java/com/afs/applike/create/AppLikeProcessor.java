@@ -1,7 +1,6 @@
 package com.afs.applike.create;
 
 import com.afs.applike.annotation.AppLikeLifeCycle;
-import com.google.auto.service.AutoService;
 
 import java.io.Writer;
 import java.util.HashMap;
@@ -11,35 +10,31 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.processing.AbstractProcessor;
+import javax.annotation.processing.Messager;
 import javax.annotation.processing.ProcessingEnvironment;
-import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Elements;
+import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;
 
 
 //核心的注解处理类，在这里我们可以扫描源代码里所有的注解，找到我们需要的注解，然后做出相应处理
-@AutoService(Processor.class)
 public class AppLikeProcessor extends AbstractProcessor {
-
+    private Messager mMessager;
     private Elements mElementUtils;
     private Map<String, AppLikeProxyClassCreator> mMap = new HashMap<>();
 
+    //支持的版本
     @Override
-    public synchronized void init(ProcessingEnvironment processingEnvironment) {
-        super.init(processingEnvironment);
-        mElementUtils = processingEnvironment.getElementUtils();
+    public SourceVersion getSupportedSourceVersion() {
+        return SourceVersion.latestSupported();
     }
 
-    /**
-     * 返回该注解处理器要解析的注解
-     *
-     * @return
-     */
+    //2.能用来处理那些注解
     @Override
     public Set<String> getSupportedAnnotationTypes() {
         Set<String> set = new LinkedHashSet<>();
@@ -48,16 +43,22 @@ public class AppLikeProcessor extends AbstractProcessor {
         return set;
     }
 
-    //支持的源代码 java 版本号
+    //3.定义一个用来生成APT目录下文件的对象
     @Override
-    public SourceVersion getSupportedSourceVersion() {
-        return SourceVersion.RELEASE_7;
+    public synchronized void init(ProcessingEnvironment processingEnvironment) {
+        super.init(processingEnvironment);
+        mElementUtils = processingEnvironment.getElementUtils();
+        mMessager = processingEnv.getMessager();
     }
+
 
     //所有逻辑都在这里完成
     @Override
     public boolean process(Set<? extends TypeElement> set, RoundEnvironment roundEnvironment) {
-        System.out.println("===============================process方法被执行");
+        mMessager.printMessage(Diagnostic.Kind.NOTE, "processing...");
+        if (set.isEmpty()) {
+            return false;
+        }
         //这里返回所有使用了 AppLifeCycle 注解的元素
         Set<? extends Element> elements = roundEnvironment.getElementsAnnotatedWith(AppLikeLifeCycle.class);
         mMap.clear();
@@ -88,18 +89,17 @@ public class AppLikeProcessor extends AbstractProcessor {
             //该类的全限定类名
             String fullClassName = typeElement.getQualifiedName().toString();
             if (!mMap.containsKey(fullClassName)) {
-                System.out.println("process class name : " + fullClassName);
+                mMessager.printMessage(Diagnostic.Kind.NOTE, "process class name : " + fullClassName);
                 //创建代理类生成器
                 AppLikeProxyClassCreator creator = new AppLikeProxyClassCreator(mElementUtils, typeElement);
                 mMap.put(fullClassName, creator);
             }
         }
-
-        System.out.println("start to generate proxy class code");
+        mMessager.printMessage(Diagnostic.Kind.NOTE, "start to generate proxy class code");
         for (Map.Entry<String, AppLikeProxyClassCreator> entry : mMap.entrySet()) {
             String className = entry.getKey();
             AppLikeProxyClassCreator creator = entry.getValue();
-            System.out.println("generate proxy class for " + className);
+            mMessager.printMessage(Diagnostic.Kind.NOTE, "generate proxy class for " + className);
 
             //生成代理类，并写入到文件里，生成逻辑都在AppLikeProxyClassCreator里实现
             try {

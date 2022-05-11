@@ -10,7 +10,11 @@ android {
         targetSdkVersion rootProject.ext.android.targetSdkVersion
         versionCode 1
         versionName "1.0"
-
+        javaCompileOptions{
+            annotationProcessorOptions {
+                includeCompileClasspath true
+            }
+        }
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -34,6 +38,7 @@ dependencies {
     //AppLike类生命周期管理者
     implementation project(path: ':AF_AppLikeLifeCycleManager')
     //AppLike类初始化
-    annotationProcessor project(path: ':AF_AppLikeCreate')
-
+    implementation project(path: ':AF_AppLikeCreate')
+    implementation project(path: ':AF_ModuleB')
+    implementation project(path: ':AF_ModuleC')
 }
