@@ -1,6 +1,7 @@
 package com.afs.applike.lifecycle.plugin
 
-import java.util.jar.*
+import java.util.jar.JarFile
+import java.util.jar.JarEntry
 
 class ScanUtil {
 

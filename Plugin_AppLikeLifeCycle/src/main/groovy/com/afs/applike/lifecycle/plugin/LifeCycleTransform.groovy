@@ -3,6 +3,8 @@ package com.afs.applike.lifecycle.plugin
 import com.android.build.api.transform.*
 import com.android.build.gradle.internal.pipeline.TransformManager
 import org.gradle.api.Project
+//import org.gradle.internal.impldep.org.apache.commons.codec.digest.DigestUtils
+import org.apache.commons.codec.digest.DigestUtils
 
 //只需要继承Transform类即可
 class LifeCycleTransform extends Transform {
